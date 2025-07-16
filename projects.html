@@ -3,56 +3,70 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Projects – Saptarshi Talukdar</title>
+    <title>Projects - Saptarshi Talukdar</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans leading-relaxed">
-
     <!-- Header -->
     <header class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-10 shadow-md">
         <div class="max-w-4xl mx-auto px-6">
             <h1 class="text-3xl font-extrabold">Projects</h1>
-            <p class="text-md mt-1 opacity-90">A few things I’ve built recently.</p>
+            <p class="text-md mt-1 opacity-90">A few things I've built recently.</p>
         </div>
     </header>
-
     <!-- Main -->
     <main class="max-w-4xl mx-auto px-6 py-10 space-y-8">
         <!-- Back link -->
         <a href="index.html" class="text-blue-600 hover:underline">&larr; Back to Home</a>
-
         <!-- Project cards -->
         <div class="space-y-6">
             <div class="bg-white p-5 rounded shadow">
-                <h2 class="text-xl font-semibold mb-1">🧠 Neural Network on FPGA</h2>
-                <p class="mb-2">MLP in SystemVerilog on DE10-Lite, with 95% MNIST accuracy. Touchscreen input, 7-segment output.</p>
-                <a href="https://github.com/SattiDaBeaver/Neural-Network-on-FPGA" class="text-indigo-600 underline">View on GitHub</a>
+                <h2 class="text-xl font-semibold mb-1">🧠 Custom NPU on DE10-Lite</h2>
+                <p class="mb-2">
+                    A compact Neural Processing Unit (NPU) with 64 processing elements in an 8×8 systolic array, supporting 8-bit inputs and 32-bit MACs. Built on the DE10-Lite FPGA and controlled via a lightweight processor.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <a href="projects/npu-de10lite/npu-de10lite.html" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm transition-colors">Learn More</a>
+                </div>
             </div>
 
+            <div class="bg-white p-5 rounded shadow">
+                <h2 class="text-xl font-semibold mb-1">🧠 Neural Network on FPGA</h2>
+                <p class="mb-2">MLP in SystemVerilog on DE10-Lite, with 95% MNIST accuracy. Touchscreen input, 7-segment output.</p>
+                <div class="flex flex-wrap gap-2">
+                    <a href="projects/neural-network-fpga.html" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm transition-colors">Learn More</a>
+                    <a href="https://github.com/SattiDaBeaver/Neural-Network-on-FPGA" class="text-indigo-600 underline">View on GitHub</a>
+                </div>
+            </div>
             <div class="bg-white p-5 rounded shadow">
                 <h2 class="text-xl font-semibold mb-1">📡 Modulator for SDR</h2>
                 <p class="mb-2">ATmega324 + custom DAC board for IQ modulation. Recognized with the Kepler Innovation Award.</p>
+                <div class="flex flex-wrap gap-2">
+                    <a href="projects/modulator-sdr.html" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm transition-colors">Learn More</a>
+                </div>
             </div>
-
             <div class="bg-white p-5 rounded shadow">
                 <h2 class="text-xl font-semibold mb-1">🎮 Tetris Battles on NiosV</h2>
                 <p class="mb-2">RISC-V + VGA game using interrupts, sound, and keyboard input for real-time 2-player gameplay.</p>
-                <a href="https://github.com/SattiDaBeaver/Tetris-Battles" class="text-indigo-600 underline">View on GitHub</a>
+                <div class="flex flex-wrap gap-2">
+                    <a href="projects/tetris-battles.html" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm transition-colors">Learn More</a>
+                    <a href="https://github.com/SattiDaBeaver/Tetris-Battles" class="text-indigo-600 underline">View on GitHub</a>
+                </div>
             </div>
-
             <div class="bg-white p-5 rounded shadow">
                 <h2 class="text-xl font-semibold mb-1">🔧 8-bit Processor on FPGA</h2>
                 <p class="mb-2">Custom 11-instruction CPU + assembler in C++. Deployed on DE10-Lite.</p>
-                <a href="https://github.com/SattiDaBeaver/SimProc" class="text-indigo-600 underline">Repo</a> ·
-                <a href="https://www.notion.so/Simple-Processor-SimProc-1d0cce974cad8039880fcb4d39bf67a3" class="text-indigo-600 underline">Docs</a>
+                <div class="flex flex-wrap gap-2">
+                    <a href="projects/8bit-processor.html" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm transition-colors">Learn More</a>
+                    <a href="https://github.com/SattiDaBeaver/SimProc" class="text-indigo-600 underline">Repo</a>
+                    <a href="https://www.notion.so/Simple-Processor-SimProc-1d0cce974cad8039880fcb4d39bf67a3" class="text-indigo-600 underline">Docs</a>
+                </div>
             </div>
         </div>
     </main>
-
     <!-- Footer -->
     <footer class="text-center text-sm text-gray-500 py-6">
         &copy; 2025 Saptarshi Talukdar
     </footer>
-
 </body>
 </html>

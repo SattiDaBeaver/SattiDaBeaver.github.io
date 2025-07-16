@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom NPU on DE10-Lite – Saptarshi Talukdar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div class="max-w-3xl mx-auto px-6 py-10">
+        <a href="../projects.html" class="text-blue-600 underline mb-4 inline-block">&larr; Back to Projects</a>
+
+        <h1 class="text-3xl font-bold mb-2">🧠 Custom NPU on DE10-Lite</h1>
+        <p class="text-sm text-gray-600 mb-6">In Progress – Summer 2025</p>
+
+        <p class="mb-4">
+            I'm building a minimal but modern-style Neural Processing Unit (NPU) on the DE10-Lite FPGA. The design features a
+            <strong>systolic array of 64 8-bit MAC units (8×8 grid)</strong>, with support for fixed-point inference and data streaming.
+        </p>
+
+        <ul class="list-disc list-inside mb-4">
+            <li>8-bit input and weight format with 32-bit MAC accumulators</li>
+            <li>Designed for efficient matrix multiplication and inference</li>
+            <li>Simple controller interfacing via UART to a host PC</li>
+            <li>Built from scratch in SystemVerilog and optimized for low-latency computation</li>
+        </ul>
+
+        <p class="mb-4">
+            A lightweight 16-bit RISC controller is planned to orchestrate memory loading, scheduling, and compute cycles — targeting real-time interaction from a PC via USB-UART.
+        </p>
+
+        <div class="mt-6">
+            <a href="systolic-sim.html" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded text-sm transition-colors">View Systolic Array Simulator</a>
+        </div>
+    </div>
+</body>
+</html>

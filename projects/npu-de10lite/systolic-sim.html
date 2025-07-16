@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Systolic Array Animation</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a2e;
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: #4fc3f7;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.3);
+        }
+        
+        .control-panel {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .cycle-info {
+            font-size: 1.2em;
+            color: #4fc3f7;
+            margin: 10px 0;
+        }
+        
+        .arrays-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .array-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .array-title {
+            text-align: center;
+            color: #4fc3f7;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .matrix {
+            display: grid;
+            gap: 8px;
+            margin: 15px 0;
+        }
+        
+        .matrix-3x3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .cell {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .pe-cell {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pe-cell::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #4fc3f7, #667eea, #764ba2);
+            border-radius: 10px;
+            z-index: -1;
+        }
+        
+        .pe-active {
+            animation: pulse 0.5s ease-in-out;
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
+        }
+        
+        .data-flow {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        
+        .flow-arrow {
+            color: #4fc3f7;
+            font-size: 2em;
+            margin: 0 10px;
+            animation: slide 1s ease-in-out infinite;
+        }
+        
+        .computation-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .computation-title {
+            color: #4fc3f7;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .computation-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .pe-computation {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #4fc3f7;
+        }
+        
+        .explanation {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .explanation h3 {
+            color: #4fc3f7;
+            margin-top: 0;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes slide {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+        
+        .highlight {
+            background: rgba(79, 195, 247, 0.3) !important;
+            border: 2px solid #4fc3f7 !important;
+        }
+        
+        .result-highlight {
+            background: rgba(76, 175, 80, 0.3) !important;
+            border: 2px solid #4caf50 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Systolic Array: Matrix Multiplication</h1>
+        
+        <div class="control-panel">
+            <button class="btn" onclick="resetAnimation()">Reset</button>
+            <button class="btn" onclick="stepAnimation()">Step</button>
+            <button class="btn" onclick="playAnimation()">Play</button>
+            <button class="btn" onclick="pauseAnimation()">Pause</button>
+            <div class="cycle-info">
+                Cycle: <span id="cycle-count">0</span> / 6
+            </div>
+        </div>
+        
+        <div class="arrays-container">
+            <div class="array-section">
+                <div class="array-title">Input Matrix A</div>
+                <div class="matrix matrix-3x3" id="matrix-a">
+                    <div class="cell">1</div>
+                    <div class="cell">2</div>
+                    <div class="cell">3</div>
+                    <div class="cell">4</div>
+                    <div class="cell">5</div>
+                    <div class="cell">6</div>
+                    <div class="cell">7</div>
+                    <div class="cell">8</div>
+                    <div class="cell">9</div>
+                </div>
+            </div>
+            
+            <div class="array-section">
+                <div class="array-title">Weights (Matrix B)</div>
+                <div class="matrix matrix-3x3" id="matrix-b">
+                    <div class="cell pe-cell">9</div>
+                    <div class="cell pe-cell">8</div>
+                    <div class="cell pe-cell">7</div>
+                    <div class="cell pe-cell">6</div>
+                    <div class="cell pe-cell">5</div>
+                    <div class="cell pe-cell">4</div>
+                    <div class="cell pe-cell">3</div>
+                    <div class="cell pe-cell">2</div>
+                    <div class="cell pe-cell">1</div>
+                </div>
+            </div>
+            
+            <div class="array-section">
+                <div class="array-title">Result Matrix C</div>
+                <div class="matrix matrix-3x3" id="matrix-c">
+                    <div class="cell">-</div>
+                    <div class="cell">-</div>
+                    <div class="cell">-</div>
+                    <div class="cell">-</div>
+                    <div class="cell">-</div>
+                    <div class="cell">-</div>
+                    <div class="cell">-</div>
+                    <div class="cell">-</div>
+                    <div class="cell">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="computation-display">
+            <div class="computation-title">Current Cycle Computations</div>
+            <div class="computation-details" id="computation-details">
+                <div class="pe-computation">Ready to start...</div>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h3>How Systolic Arrays Work:</h3>
+            <p><strong>Step 1:</strong> Weights are pre-loaded into Processing Elements (PEs) arranged in a grid</p>
+            <p><strong>Step 2:</strong> Input activations flow horizontally through the array</p>
+            <p><strong>Step 3:</strong> Each PE performs: output = weight × input + partial_sum</p>
+            <p><strong>Step 4:</strong> Partial sums flow vertically, accumulating results</p>
+            <p><strong>Step 5:</strong> Final results emerge from the bottom of the array</p>
+            <p><strong>Key Advantage:</strong> All PEs work simultaneously, achieving high throughput through parallelism</p>
+        </div>
+    </div>
+
+    <script>
+        let currentCycle = 0;
+        let isPlaying = false;
+        let playInterval;
+        
+        // Matrix data
+        const matrixA = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ];
+        
+        const matrixB = [
+            [9, 8, 7],
+            [6, 5, 4],
+            [3, 2, 1]
+        ];
+        
+        const resultMatrix = [
+            [30, 24, 18],
+            [84, 69, 54],
+            [138, 114, 90]
+        ];
+        
+        // Animation states for each cycle
+        const animationStates = [
+            {
+                cycle: 0,
+                description: "Initialize: Weights loaded in PEs",
+                activeInputs: [],
+                computations: ["System initialized", "Weights loaded in PEs", "Ready to process inputs"],
+                results: []
+            },
+            {
+                cycle: 1,
+                description: "First row of A enters the array",
+                activeInputs: [[0, 0]],
+                computations: ["PE(0,0): 1 × 9 = 9"],
+                results: []
+            },
+            {
+                cycle: 2,
+                description: "Second row enters, first row propagates",
+                activeInputs: [[0, 1], [1, 0]],
+                computations: ["PE(0,0): 2 × 9 = 18, acc = 9 + 18 = 27", "PE(0,1): 1 × 8 = 8", "PE(1,0): 4 × 6 = 24"],
+                results: []
+            },
+            {
+                cycle: 3,
+                description: "Full pipeline active",
+                activeInputs: [[0, 2], [1, 1], [2, 0]],
+                computations: [
+                    "PE(0,0): 3 × 9 = 27, acc = 27 + 27 = 54",
+                    "PE(0,1): 2 × 8 = 16, acc = 8 + 16 = 24",
+                    "PE(0,2): 1 × 7 = 7",
+                    "PE(1,0): 5 × 6 = 30, acc = 24 + 30 = 54",
+                    "PE(1,1): 4 × 5 = 20",
+                    "PE(2,0): 7 × 3 = 21"
+                ],
+                results: []
+            },
+            {
+                cycle: 4,
+                description: "First results start emerging",
+                activeInputs: [[1, 2], [2, 1]],
+                computations: [
+                    "PE(0,1): 3 × 8 = 24, acc = 24 + 24 = 48",
+                    "PE(0,2): 2 × 7 = 14, acc = 7 + 14 = 21",
+                    "PE(1,1): 5 × 5 = 25, acc = 20 + 25 = 45",
+                    "PE(1,2): 4 × 4 = 16",
+                    "PE(2,1): 8 × 2 = 16, acc = 21 + 16 = 37"
+                ],
+                results: [[0, 0, 30]]
+            },
+            {
+                cycle: 5,
+                description: "More results emerge",
+                activeInputs: [[2, 2]],
+                computations: [
+                    "PE(0,2): 3 × 7 = 21, acc = 21 + 21 = 42",
+                    "PE(1,2): 5 × 4 = 20, acc = 16 + 20 = 36",
+                    "PE(2,2): 9 × 1 = 9, acc = 37 + 9 = 46"
+                ],
+                results: [[0, 0, 30], [0, 1, 24], [1, 0, 84]]
+            },
+            {
+                cycle: 6,
+                description: "All results computed",
+                activeInputs: [],
+                computations: ["All computations complete"],
+                results: [[0, 0, 30], [0, 1, 24], [0, 2, 18], [1, 0, 84], [1, 1, 69], [1, 2, 54], [2, 0, 138], [2, 1, 114], [2, 2, 90]]
+            }
+        ];
+        
+        function resetAnimation() {
+            currentCycle = 0;
+            isPlaying = false;
+            clearInterval(playInterval);
+            updateDisplay();
+        }
+        
+        function stepAnimation() {
+            if (currentCycle < animationStates.length - 1) {
+                currentCycle++;
+                updateDisplay();
+            }
+        }
+        
+        function playAnimation() {
+            if (!isPlaying) {
+                isPlaying = true;
+                playInterval = setInterval(() => {
+                    if (currentCycle < animationStates.length - 1) {
+                        currentCycle++;
+                        updateDisplay();
+                    } else {
+                        pauseAnimation();
+                    }
+                }, 2000);
+            }
+        }
+        
+        function pauseAnimation() {
+            isPlaying = false;
+            clearInterval(playInterval);
+        }
+        
+        function updateDisplay() {
+            const state = animationStates[currentCycle];
+            
+            // Update cycle counter
+            document.getElementById('cycle-count').textContent = currentCycle;
+            
+            // Clear previous highlights
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.classList.remove('highlight', 'pe-active', 'result-highlight');
+            });
+            
+            // Highlight active inputs
+            state.activeInputs.forEach(([row, col]) => {
+                const matrixAcells = document.querySelectorAll('#matrix-a .cell');
+                const matrixBcells = document.querySelectorAll('#matrix-b .cell');
+                
+                matrixAcells[row * 3 + col].classList.add('highlight');
+                matrixBcells[row * 3 + col].classList.add('pe-active');
+            });
+            
+            // Update computations
+            const computationDetails = document.getElementById('computation-details');
+            computationDetails.innerHTML = '';
+            state.computations.forEach(comp => {
+                const div = document.createElement('div');
+                div.className = 'pe-computation';
+                div.textContent = comp;
+                computationDetails.appendChild(div);
+            });
+            
+            // Update results
+            const resultCells = document.querySelectorAll('#matrix-c .cell');
+            resultCells.forEach(cell => cell.textContent = '-');
+            
+            state.results.forEach(([row, col, value]) => {
+                const index = row * 3 + col;
+                resultCells[index].textContent = value;
+                resultCells[index].classList.add('result-highlight');
+            });
+        }
+        
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
